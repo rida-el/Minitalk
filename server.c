@@ -3,17 +3,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int cpid;
+int	g_cpid;
 
-void ft_putchar(char c)
+void	ft_putnbr(long long n)
 {
-	write(1, &c, 1);
-}
-void ft_putnbr(long long n)
-{
-	char *BASE_TEN;
+	char	*base_ten;
 
-	BASE_TEN = "0123456789";
+	base_ten = "0123456789";
 	if (n < 0)
 	{
 		write(1, "-", 1);
@@ -21,26 +17,28 @@ void ft_putnbr(long long n)
 	}
 	if (n > 9)
 		ft_putnbr(n / 10);
-	write(1, &BASE_TEN[n % 10], 1);
+	write(1, &base_ten[n % 10], 1);
 }
-void ft_kill(int pid, int sig){
-	int ret;
+
+void	ft_kill(int pid, int sig)
+{
+	int	ret;
 
 	ret = kill(pid, sig);
-	if(ret == -1)
+	if (ret == -1)
 		exit(EXIT_FAILURE);
 }
-int abs(int n){
-	if (n < 0){
+
+int	abs(int n){
+	if (n < 0)
 		return (-n);
-	}
 	return (n);
 }
-void ft_convert(char *s, siginfo_t *info)
+void	ft_convert(char *s, siginfo_t *info)
 {
-	int pow;
-	unsigned int c;
-	int i;
+	int 			pow;
+	unsigned int	c;
+	int				i;
 
 	pow = 1;
 	c = 0;
@@ -50,27 +48,21 @@ void ft_convert(char *s, siginfo_t *info)
 		c += pow * abs(s[i] - '0');
 		pow *= 2;
 	}
-	// write(1, " c-->", 5);
-	// ft_putnbr(c);
 	if (c == 0)
-	{
 		ft_kill(info->si_pid, SIGUSR2);
-	}
 	write(1, &c, 1);
 }
 
-void handler(int sig, siginfo_t *info, void *p)
+void	handler(int sig, siginfo_t *info, void *p)
 {
-	static int i = 0;
-	static char str[9];
-	// char *str;
+	static int	i;
+	static char	str[9];
 
-	if (cpid != info->si_pid)
+	if (g_cpid != info->si_pid)
 	{
 		i = 0;
-		cpid = info->si_pid;
+		g_cpid = info->si_pid;
 	}
-
 	if (sig == SIGUSR1)
 		str[i] = '0';
 	else if (sig == SIGUSR2)
@@ -86,12 +78,11 @@ void handler(int sig, siginfo_t *info, void *p)
 
 int main()
 {
-	struct sigaction sa;
+	struct sigaction	sa;
 
 	write(1, "The server's process id is: ", 28);
 	ft_putnbr(getpid());
-	ft_putchar('\n');
-
+	write(1, "\n", 1);
 	sa.sa_flags = SA_SIGINFO;
 	sa.sa_sigaction = &handler;
 	sigaction(SIGUSR1, &sa, NULL);
