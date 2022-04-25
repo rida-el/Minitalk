@@ -29,14 +29,16 @@ void	ft_kill(int pid, int sig)
 		exit(EXIT_FAILURE);
 }
 
-int	abs(int n){
+int	abs(int n)
+{
 	if (n < 0)
 		return (-n);
 	return (n);
 }
+
 void	ft_convert(char *s, siginfo_t *info)
 {
-	int 			pow;
+	int				pow;
 	unsigned int	c;
 	int				i;
 
@@ -76,7 +78,7 @@ void	handler(int sig, siginfo_t *info, void *p)
 	}
 }
 
-int main()
+int	main(void)
 {
 	struct sigaction	sa;
 
