@@ -29,13 +29,6 @@ void	ft_kill(int pid, int sig)
 		exit(EXIT_FAILURE);
 }
 
-int	abs(int n)
-{
-	if (n < 0)
-		return (-n);
-	return (n);
-}
-
 void	ft_convert(char *s, siginfo_t *info)
 {
 	int				pow;
@@ -44,15 +37,20 @@ void	ft_convert(char *s, siginfo_t *info)
 
 	pow = 1;
 	c = 0;
-	i = 8;
+	i = 0;
+	while (s[i])
+	{
+		i++;
+	}
 	while (i-- > 0)
 	{
-		c += pow * abs(s[i] - '0');
+		c += pow * (s[i] - '0');
 		pow *= 2;
 	}
 	if (c == 0)
 		ft_kill(info->si_pid, SIGUSR2);
 	write(1, &c, 1);
+	
 }
 
 void	handler(int sig, siginfo_t *info, void *p)
