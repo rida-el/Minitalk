@@ -1,43 +1,13 @@
-#include <signal.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <string.h>
+#include "minitalk_bonus.h"
 
 int g_cpid;
-int fffd;
 
-void ft_putnbr(long long n)
+unsigned char get_char(char *s)
 {
-	char *base_ten;
 
-	base_ten = "0123456789";
-	if (n < 0)
-	{
-		write(1, "-", 1);
-		n *= -1;
-	}
-	if (n > 9)
-		ft_putnbr(n / 10);
-	write(1, &base_ten[n % 10], 1);
-}
-
-void ft_kill(int pid, int sig)
-{
-	int ret;
-
-	ret = kill(pid, sig);
-	if (ret == -1)
-		exit(EXIT_FAILURE);
-}
-
-void ft_convert(char *s, siginfo_t *info, int *count)
-{
 	int pow;
 	unsigned char c;
 	int i;
-	char arr[5];
 
 	pow = 1;
 	c = 0;
@@ -47,13 +17,22 @@ void ft_convert(char *s, siginfo_t *info, int *count)
 		c += pow * (s[i] - '0');
 		pow *= 2;
 	}
+	return (c);
+}
+
+void ft_convert_bonus(char *s, siginfo_t *info, int *count)
+{
+	char arr[5];
+	unsigned char	c;
+
+	c = get_char(s);
 	if (c == 0)
 	{
 		*count = 0;
 		ft_kill(info->si_pid, SIGUSR2);
 		return ;
 	}
-	if ((c & (1 << 7)) || *count != 0)
+	if ((c & (1 << 7)))
 	{
 		arr[(*count)++] = c;
 		if (*count == 4)
@@ -63,17 +42,15 @@ void ft_convert(char *s, siginfo_t *info, int *count)
 		}
 	}
 	else
-	{
 		write(1, &c, 1);
-	}
 }
 
-void handler(int sig, siginfo_t *info, void *p)
+void handler_bn(int sig, siginfo_t *info, void *p)
 {
 	static int i;
-	int j = 0;
 	static char str[9];
 	static int count;
+	(void)p;
 
 	if (g_cpid != info->si_pid)
 	{
@@ -90,7 +67,7 @@ void handler(int sig, siginfo_t *info, void *p)
 	{
 		i = 0;
 		str[8] = 0;
-		ft_convert(str, info, &count);
+		ft_convert_bonus(str, info, &count);
 	}
 }
 
@@ -101,7 +78,7 @@ int main(void)
 	ft_putnbr(getpid());
 	write(1, "\n", 1);
 	sa.sa_flags = SA_SIGINFO;
-	sa.sa_sigaction = &handler;
+	sa.sa_sigaction = &handler_bn;
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
 	while (1)

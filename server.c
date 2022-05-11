@@ -1,33 +1,6 @@
-#include <signal.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "minitalk.h"
 
 int g_cpid;
-
-void ft_putnbr(long long n)
-{
-	char *base_ten;
-
-	base_ten = "0123456789";
-	if (n < 0)
-	{
-		write(1, "-", 1);
-		n *= -1;
-	}
-	if (n > 9)
-		ft_putnbr(n / 10);
-	write(1, &base_ten[n % 10], 1);
-}
-
-void ft_kill(int pid, int sig)
-{
-	int ret;
-
-	ret = kill(pid, sig);
-	if (ret == -1)
-		exit(EXIT_FAILURE);
-}
 
 void ft_convert(char *s, siginfo_t *info)
 {
@@ -53,7 +26,7 @@ void handler(int sig, siginfo_t *info, void *p)
 	static int i;
 	int j = 0;
 	static char str[9];
-
+	(void)p;
 	if (g_cpid != info->si_pid)
 	{
 		i = 0;
