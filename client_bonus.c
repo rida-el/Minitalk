@@ -44,13 +44,13 @@ void ft_putnbr(long long n)
 	write(1, &base_ten[n % 10], 1);
 }
 
-// void handler(int sig)
-// {
-// 	if (sig == SIGUSR2)
-// 	{
-// 		write(1, "ACKNOWLEDGED !\n", 15);
-// 	}
-// }
+void handler(int sig)
+{
+	if (sig == SIGUSR2)
+	{
+		write(1, "ACKNOWLEDGED !\n", 15);
+	}
+}
 
 int main(int argc, char **argv)
 {
@@ -63,11 +63,15 @@ int main(int argc, char **argv)
 		printf("Please input the PID and the string to send");
 		return (0);
 	}
+	signal(SIGUSR2, handler);
+	// signal(SIGINT, handle_int);
 	pid = atoi(argv[1]);
 	i = 0;
 	while (argv[2][i])
 	{
 		send_signal(pid, (unsigned char)argv[2][i]);
 		i++;
+		// sleep(1);
 	}
+	send_signal(pid, (unsigned char)argv[2][i]);
 }
