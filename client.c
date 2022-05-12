@@ -1,8 +1,8 @@
 #include "minitalk.h"
 
-void send_signal(int pid, unsigned char c)
+void	send_signal(int pid, unsigned char c)
 {
-	int bit;
+	int	bit;
 
 	bit = 0;
 	while (bit < 8)
@@ -17,14 +17,14 @@ void send_signal(int pid, unsigned char c)
 	}
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	int pid;
-	int i;
+	int	pid;
+	int	i;
 
 	if (argc != 3)
 	{
-		printf("Please input the PID and the string to send");
+		write(1, "Please input the PID and the string to send", 43);
 		return (0);
 	}
 	pid = ft_atoi(argv[1]);

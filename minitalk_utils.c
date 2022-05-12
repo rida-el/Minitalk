@@ -1,8 +1,8 @@
 #include "minitalk.h"
 
-void ft_putnbr(long long n)
+void	ft_putnbr(long long n)
 {
-	char *base_ten;
+	char	*base_ten;
 
 	base_ten = "0123456789";
 	if (n < 0)
@@ -42,9 +42,9 @@ int	ft_atoi(const char *s1)
 	return (sum * signe);
 }
 
-void ft_kill(int pid, int sig)
+void	ft_kill(int pid, int sig)
 {
-	int ret;
+	int	ret;
 
 	ret = kill(pid, sig);
 	if (ret == -1)

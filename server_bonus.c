@@ -1,13 +1,12 @@
 #include "minitalk_bonus.h"
 
-int g_cpid;
+int	g_cpid;
 
-unsigned char get_char(char *s)
+unsigned char	get_char(char *s)
 {
-
-	int pow;
-	unsigned char c;
-	int i;
+	int				pow;
+	unsigned char	c;
+	int				i;
 
 	pow = 1;
 	c = 0;
@@ -20,9 +19,9 @@ unsigned char get_char(char *s)
 	return (c);
 }
 
-void ft_convert_bonus(char *s, siginfo_t *info, int *count)
+void	ft_convert_bonus(char *s, siginfo_t *info, int *count)
 {
-	char arr[5];
+	char			arr[5];
 	unsigned char	c;
 
 	c = get_char(s);
@@ -45,13 +44,13 @@ void ft_convert_bonus(char *s, siginfo_t *info, int *count)
 		write(1, &c, 1);
 }
 
-void handler_bn(int sig, siginfo_t *info, void *p)
+void	handler_bn(int sig, siginfo_t *info, void *p)
 {
-	static int i;
-	static char str[9];
-	static int count;
-	(void)p;
+	static int	i;
+	static char	str[9];
+	static int	count;
 
+	(void)p;
 	if (g_cpid != info->si_pid)
 	{
 		i = 0;
@@ -71,9 +70,10 @@ void handler_bn(int sig, siginfo_t *info, void *p)
 	}
 }
 
-int main(void)
+int	main(void)
 {
-	struct sigaction sa;
+	struct sigaction	sa;
+
 	write(1, "The server's process id is: ", 28);
 	ft_putnbr(getpid());
 	write(1, "\n", 1);

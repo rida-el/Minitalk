@@ -1,12 +1,12 @@
 #include "minitalk.h"
 
-int g_cpid;
+int		g_cpid;
 
-void ft_convert(char *s, siginfo_t *info)
+void	ft_convert(char *s, siginfo_t *info)
 {
-	int pow;
-	unsigned char c;
-	int i;
+	int				pow;
+	unsigned char	c;
+	int				i;
 
 	pow = 1;
 	c = 0;
@@ -21,21 +21,17 @@ void ft_convert(char *s, siginfo_t *info)
 	write(1, &c, 1);
 }
 
-void handler(int sig, siginfo_t *info, void *p)
+void	handler(int sig, siginfo_t *info, void *p)
 {
-	static int i;
-	int j = 0;
-	static char str[9];
+	static int	i;
+	int			j;
+	static char	str[9];
+
 	(void)p;
 	if (g_cpid != info->si_pid)
 	{
 		i = 0;
 		g_cpid = info->si_pid;
-		while (str[j])
-		{
-			str[j] = '0';
-			j++;
-		}
 	}
 	if (sig == SIGUSR1)
 		str[i] = '0';
@@ -50,9 +46,9 @@ void handler(int sig, siginfo_t *info, void *p)
 	}
 }
 
-int main(void)
+int	main(void)
 {
-	struct sigaction sa;
+	struct sigaction	sa;
 
 	write(1, "The server's process id is: ", 28);
 	ft_putnbr(getpid());
